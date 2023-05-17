@@ -18,17 +18,17 @@ int Addr;//线圈地址或寄存器起始地址
 unsigned char Register[2];//一个寄存器2个字节
 int RegiNumber;//寄存器数量
 void main()
-{
+{  
 	 DS18B20_ConvertT();		//上电先转换一次温度，防止第一次读数据错误
 	 Delay(1000);
    UART_Init();		//串口初始化
 	 CRC=crc_cal_value(Message,sizeof(Message)-2);
 	 Message[6]=(unsigned char)CRC;
 	 Message[7]=(unsigned char)(CRC>>8);
-	
 	 SendMessage(Message,sizeof(Message));
+	P1_0=0;
 	while(1)
-	{
+	{  
 				DS18B20_ConvertT();	//转换温度
 		    T=DS18B20_ReadT();	//读取温度
 	  	  Register[1]=(char)T;
@@ -121,6 +121,8 @@ unsigned int crc_cal_value(unsigned char* data_value, unsigned char data_length)
 		  case 6: P2_6=onoff;
 			 break;
 		  case 7: P2_7=onoff;
+			 break;
+		 case 8: P1_0=onoff==1?0:1;//风扇
 			 break;
 	 }
 	 SendMessage(Message,sizeof(Message));
