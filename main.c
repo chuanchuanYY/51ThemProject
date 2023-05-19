@@ -6,6 +6,7 @@ void SendMessage(unsigned char* msg,int len);
 unsigned int crc_cal_value(unsigned char* data_value, unsigned char data_length);
 unsigned int CRC;
 void writeCoils(int CoilsAddr,int onoff);
+void readCoilsStatu(int startAddr,int coilsCount);
  void resultKeepRegister(int StartAddr,int RegisterDataPort);
 unsigned char Message[8]={0x01,0x03,0x00,0x00,0x00,0x01};//用于接收报文
 int mesgIndex=0;
@@ -51,6 +52,8 @@ void main()
 							case 0x05:writeCoils(Addr,Message[4]==0xFF?0:1);
 								break;
 							case 0x03:resultKeepRegister(Addr,RegiNumber);
+								break;
+							case 0x01:readCoilsStatu(Addr,RegiNumber);//coliscount的值跟RegiNumber一样计算 
 								break;
 						}
 				}
@@ -127,7 +130,25 @@ unsigned int crc_cal_value(unsigned char* data_value, unsigned char data_length)
 	 }
 	 SendMessage(Message,sizeof(Message));
  }
-
+ //读输出状态
+void readCoilsStatu(int startAddr,int coilsCount)
+{
+	 int datalen=((coilsCount/8)+(coilsCount%8>0?1:0));
+	 int retuleMsgLenth=4;
+	 unsigned char retuleMsg[50];
+	 retuleMsg[0]=SlaveAddr;
+	 retuleMsg[1]=0x01;
+	 retuleMsg[2]=(char)datalen;
+	switch(startAddr)
+	{
+		case 0:retuleMsg[3]=~P2;
+			break;
+	}
+	    CRC =crc_cal_value(retuleMsg,retuleMsgLenth);
+	   retuleMsg[retuleMsgLenth++]=(unsigned char)CRC;
+	   retuleMsg[retuleMsgLenth]=(unsigned char)(CRC>>8);
+	   SendMessage(retuleMsg,retuleMsgLenth);
+}
  //读保持型寄存器
  int j=0;
  unsigned int crcValue;
