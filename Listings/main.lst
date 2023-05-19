@@ -1,4 +1,4 @@
-C51 COMPILER V9.54   MAIN                                                                  05/19/2023 00:00:17 PAGE 1   
+C51 COMPILER V9.54   MAIN                                                                  05/19/2023 10:07:35 PAGE 1   
 
 
 C51 COMPILER V9.54, COMPILATION OF MODULE MAIN
@@ -14,10 +14,10 @@ line level    source
    4          #include "DS18B20.h"
    5          void SendMessage(unsigned char* msg,int len);
    6          unsigned int crc_cal_value(unsigned char* data_value, unsigned char data_length);
-   7          unsigned int CRC;
-   8          void writeCoils(int CoilsAddr,int onoff);
-   9          void readCoilsStatu(int startAddr,int coilsCount);
-  10           void resultKeepRegister(int StartAddr,int RegisterDataPort);
+   7          void writeCoils(int CoilsAddr,int onoff);
+   8          void readCoilsStatu(int startAddr,int coilsCount);
+   9          void resultKeepRegister(int StartAddr,int RegisterDataPort);
+  10          unsigned int CRC;
   11          unsigned char Message[8]={0x01,0x03,0x00,0x00,0x00,0x01};//用于接收报文
   12          int mesgIndex=0;
   13          char mesgFlag=0;
@@ -62,7 +62,7 @@ line level    source
   52   5                    case 0x05:writeCoils(Addr,Message[4]==0xFF?0:1);
   53   5                      break;
   54   5                    case 0x03:resultKeepRegister(Addr,RegiNumber);
-C51 COMPILER V9.54   MAIN                                                                  05/19/2023 00:00:17 PAGE 2   
+C51 COMPILER V9.54   MAIN                                                                  05/19/2023 10:07:35 PAGE 2   
 
   55   5                      break;
   56   5                    case 0x01:readCoilsStatu(Addr,RegiNumber);//coliscount的值跟RegiNumber一样计算 
@@ -126,7 +126,7 @@ line level    source
  114   2            case 1: P2_1=onoff;
  115   2             break;
  116   2            case 2: P2_2=onoff;
-C51 COMPILER V9.54   MAIN                                                                  05/19/2023 00:00:17 PAGE 3   
+C51 COMPILER V9.54   MAIN                                                                  05/19/2023 10:07:35 PAGE 3   
 
  117   2             break;
  118   2            case 3: P2_3=onoff;
@@ -155,7 +155,7 @@ line level    source
  141   1         retuleMsg[2]=(char)datalen;
  142   1        switch(startAddr)
  143   1        {
- 144   2          case 0:retuleMsg[3]=~P2;
+ 144   2          case 0:retuleMsg[3]=~P2;retuleMsg[retuleMsgLenth++]=P1_0;
  145   2            break;
  146   2        }
  147   1            CRC =crc_cal_value(retuleMsg,retuleMsgLenth);
@@ -190,9 +190,9 @@ line level    source
 
 
 MODULE INFORMATION:   STATIC OVERLAYABLE
-C51 COMPILER V9.54   MAIN                                                                  05/19/2023 00:00:17 PAGE 4   
+C51 COMPILER V9.54   MAIN                                                                  05/19/2023 10:07:35 PAGE 4   
 
-   CODE SIZE        =    832    ----
+   CODE SIZE        =    851    ----
    CONSTANT SIZE    =   ----    ----
    XDATA SIZE       =   ----    ----
    PDATA SIZE       =   ----    ----

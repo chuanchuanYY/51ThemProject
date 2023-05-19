@@ -4,10 +4,10 @@
 #include "DS18B20.h"
 void SendMessage(unsigned char* msg,int len);
 unsigned int crc_cal_value(unsigned char* data_value, unsigned char data_length);
-unsigned int CRC;
 void writeCoils(int CoilsAddr,int onoff);
 void readCoilsStatu(int startAddr,int coilsCount);
- void resultKeepRegister(int StartAddr,int RegisterDataPort);
+void resultKeepRegister(int StartAddr,int RegisterDataPort);
+unsigned int CRC;
 unsigned char Message[8]={0x01,0x03,0x00,0x00,0x00,0x01};//用于接收报文
 int mesgIndex=0;
 char mesgFlag=0;
@@ -141,7 +141,7 @@ void readCoilsStatu(int startAddr,int coilsCount)
 	 retuleMsg[2]=(char)datalen;
 	switch(startAddr)
 	{
-		case 0:retuleMsg[3]=~P2;
+		case 0:retuleMsg[3]=~P2;retuleMsg[retuleMsgLenth++]=P1_0;
 			break;
 	}
 	    CRC =crc_cal_value(retuleMsg,retuleMsgLenth);
